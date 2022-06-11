@@ -19,6 +19,20 @@ public class EmployeeDaoMySQLImpl extends BasicDAO<Employee> implements Employee
 
 
     //        由员工id查询
+    public Employee querySingleByeidUnadmin(Class<Employee> clazz, Object... parameters) {
+        Connection connection = null;
+        String sql = "select * from employee where eid = ? and superuser!=1";
+        try {
+            connection = JDBCUtilsByDruid.getConnection();
+            return qre.query(connection, sql, new BeanHandler<Employee>(clazz), parameters);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
+        } finally {
+            JDBCUtilsByDruid.close(null, null, connection);
+        }
+    }
+
     public Employee querySingleByeid(Class<Employee> clazz, Object... parameters) {
         Connection connection = null;
         String sql = "select * from employee where eid = ?";
@@ -33,10 +47,25 @@ public class EmployeeDaoMySQLImpl extends BasicDAO<Employee> implements Employee
         }
     }
 
+    @Override
+    public Employee queryhisSingleByeid(Class<Employee> clazz, Object... parameters) {
+        Connection connection = null;
+        String sql = "select * from history_employee where eid = ?";
+        try {
+            connection = JDBCUtilsByDruid.getConnection();
+            return qre.query(connection, sql, new BeanHandler<Employee>(clazz), parameters);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
+        } finally {
+            JDBCUtilsByDruid.close(null, null, connection);
+        }
+    }
+
     //查询所有员工
     public List<Employee> queryAllEmployee(Class<Employee> clazz) {
         Connection connection = null;
-        String sql = "select * from employee";
+        String sql = "select * from employee where superuser!=1";
         try {
             connection = JDBCUtilsByDruid.getConnection();
             return qre.query(connection, sql, new BeanListHandler<Employee>(clazz));
@@ -61,6 +90,20 @@ public class EmployeeDaoMySQLImpl extends BasicDAO<Employee> implements Employee
         try {
             connection = JDBCUtilsByDruid.getConnection();
             Employee e = querySingle(sql, Employee.class, ename, password);
+            return e;
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
+        } finally {
+            JDBCUtilsByDruid.close(null, null, connection);
+        }
+    }
+
+    public Employee finstaffByidAndPassword(String eid, String password) {
+        Connection connection = null;
+        String sql = "select * from employee where eid= ? and password= ?";
+        try {
+            connection = JDBCUtilsByDruid.getConnection();
+            Employee e = querySingle(sql, Employee.class, eid, password);
             return e;
         } catch (SQLException e) {
             throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
@@ -166,18 +209,53 @@ public class EmployeeDaoMySQLImpl extends BasicDAO<Employee> implements Employee
 
 //                System.out.println(employee.getEid() == "");
 //                System.out.println(employee.getEid().equals(""));
-                sql = sql + " and eid like '" + employee.getEid() + "'";
+                sql = sql + " and eid like '%" + employee.getEid() + "%'";
             }
 //            if ((employee.getEname() != null) && (!(employee.getEname().equals("")))) {
             if ((employee.getEname() != null) && (employee.getEname().length() > 0)) {
 
 //                System.out.println(employee.getEname() == "");
 //                System.out.println(employee.getEname().equals(""));
-                sql = sql + " and ename like '" + employee.getEname() + "'";
+                sql = sql + " and ename like '%" + employee.getEname() + "%'";
             }
         }
 
         sql = sql + " limit " + begin + "," + size;
+        System.out.println(sql);
+        Connection connection = null;
+        try {
+            connection = JDBCUtilsByDruid.getConnection();
+            return qre.query(connection, sql, new BeanListHandler<Employee>(Employee.class));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
+        } finally {
+            JDBCUtilsByDruid.close(null, null, connection);
+        }
+
+    }
+
+    @Override
+    public List<Employee> selectByCondition(Employee employee) {
+        String sql = "select * from employee where 1=1";
+
+        if (employee != null) {
+//            if ((employee.getEid() != null) && (!(employee.getEid().equals("")))) {
+            if ((employee.getEid() != null) && (employee.getEid().length() > 0)) {
+
+//                System.out.println(employee.getEid() == "");
+//                System.out.println(employee.getEid().equals(""));
+                sql = sql + " and eid like '%" + employee.getEid() + "%'";
+            }
+//            if ((employee.getEname() != null) && (!(employee.getEname().equals("")))) {
+            if ((employee.getEname() != null) && (employee.getEname().length() > 0)) {
+
+//                System.out.println(employee.getEname() == "");
+//                System.out.println(employee.getEname().equals(""));
+                sql = sql + " and ename like '%" + employee.getEname() + "%'";
+            }
+        }
+        sql = sql + " and superuser!=1";
         System.out.println(sql);
         Connection connection = null;
         try {

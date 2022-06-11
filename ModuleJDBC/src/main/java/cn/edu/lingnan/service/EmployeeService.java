@@ -11,11 +11,15 @@ import java.util.List;
 public interface EmployeeService {
     public Employee querySingleByeid(Class<Employee> clazz, Object... parameters);
 
+    Employee querySingleByeidUnadmin(Class<Employee> clazz, Object... parameters);
+
     public List<Employee> queryAllEmployee(Class<Employee> clazz);
 
     public List<Employee> queryMultiAllEmployee();
 
     public Employee finstaffBynameAndPassword(String ename, String password);
+
+    public Employee finstaffByidAndPassword(String eid, String password);
 
     public List<Employee> queryMultiByename(Class<Employee> clazz, String ename);
 
@@ -34,4 +38,8 @@ public interface EmployeeService {
     void deleteByIds(String[] ids);
 
     boolean register(Employee employee);
+
+    boolean unexiteid(Employee employee);
+
+    List<Employee> selectByCondition(Employee employee);
 }

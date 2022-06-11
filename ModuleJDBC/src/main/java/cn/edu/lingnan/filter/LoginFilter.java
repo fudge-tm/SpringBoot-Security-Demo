@@ -3,12 +3,13 @@ package cn.edu.lingnan.filter;
 import cn.edu.lingnan.pojo.Employee;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-//@WebFilter("/admin/*")
+@WebFilter("/admin/*")
 public class LoginFilter implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }
@@ -29,13 +30,17 @@ public class LoginFilter implements Filter {
             if (employee.getSuperuser() == 1) {
                 chain.doFilter(request, response);
             } else {
-                res.sendRedirect(req.getContextPath() + "/purviewError.jsp");
+                // 存储错误信息到request
+                session.setAttribute("login_msg", "权限不足，请用管理员账号登录!");
+                res.sendRedirect(req.getContextPath() + "/login.jsp");
 //                req.getRequestDispatcher("/purviewError.jsp").forward(req, response);
             }
         } else {
-            res.sendRedirect(req.getContextPath() + "/purviewError.jsp");
+            // 存储错误信息到request
+            session.setAttribute("login_msg", "权限不足，请用管理员账号登录!");
+            res.sendRedirect(req.getContextPath() + "/login.jsp");
+//                req.getRequestDispatcher("/purviewError.jsp").forward(req, response);
         }
-
 
     }
 }

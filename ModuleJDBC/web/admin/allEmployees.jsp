@@ -62,7 +62,7 @@
 
 </table>
 
-<script type="text/javascript" src="../js/allEmp.js"></script>
+<script type="text/javascript" src="../assets/js/allEmp.js"></script>
 
 </body>
 </html>

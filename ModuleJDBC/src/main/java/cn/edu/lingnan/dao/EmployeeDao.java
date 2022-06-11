@@ -7,6 +7,8 @@ import java.util.List;
 public interface EmployeeDao {
     public Employee querySingleByeid(Class<Employee> clazz, Object... parameters);
 
+    public Employee queryhisSingleByeid(Class<Employee> clazz, Object... parameters);
+
     public List<Employee> queryAllEmployee(Class<Employee> clazz);
 
     public List<Employee> queryMultiAllEmployee();
@@ -31,5 +33,7 @@ public interface EmployeeDao {
 
     boolean add(Employee employee);
 
-//    public int selectTotalCountByCondition(Employee employee);
+    public Employee finstaffByidAndPassword(String eid, String password);
+
+    public List<Employee> selectByCondition(Employee employee);
 }

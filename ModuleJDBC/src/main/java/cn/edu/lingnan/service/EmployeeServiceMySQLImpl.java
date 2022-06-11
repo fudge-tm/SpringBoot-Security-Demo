@@ -23,6 +23,12 @@ public class EmployeeServiceMySQLImpl implements EmployeeService {
         return employeeDao.querySingleByeid(clazz, parameters);
     }
 
+    @Override
+    public Employee querySingleByeidUnadmin(Class<Employee> clazz, Object... parameters) {
+        return employeeDao.querySingleByeidUnadmin(clazz, parameters);
+    }
+
+
     //查询所有员工
     @Override
     public List<Employee> queryAllEmployee(Class<Employee> clazz) {
@@ -39,6 +45,11 @@ public class EmployeeServiceMySQLImpl implements EmployeeService {
     @Override
     public Employee finstaffBynameAndPassword(String ename, String password) {
         return employeeDao.finstaffBynameAndPassword(ename, password);
+    }
+
+    @Override
+    public Employee finstaffByidAndPassword(String eid, String password) {
+        return employeeDao.finstaffByidAndPassword(eid, password);
     }
 
     //由姓名查询员工
@@ -80,9 +91,11 @@ public class EmployeeServiceMySQLImpl implements EmployeeService {
 
         String sql2 = "delete from employee where eid=?";
         int rows2 = employeeDao.dml(sql2, id);
+        System.out.println("**" + rows2 + "**");
         if (rows2 > 0)
             flag = true;
 //        想要出错回滚
+        System.out.println("%%" + flag + "%%");
         return flag;
     }
 
@@ -177,11 +190,28 @@ public class EmployeeServiceMySQLImpl implements EmployeeService {
     @Override
     public boolean register(Employee employee) {
         Employee employee1 = employeeDao.querySingleByeid(Employee.class, employee.getEid());
-        if (employee1 == null) {
+        Employee employee2 = employeeDao.queryhisSingleByeid(Employee.class, employee.getEid());
+        if (employee1 == null && employee2 == null) {
             employeeDao.add(employee);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean unexiteid(Employee employee) {
+        Employee employee1 = employeeDao.querySingleByeid(Employee.class, employee.getEid());
+        Employee employee2 = employeeDao.queryhisSingleByeid(Employee.class, employee.getEid());
+        if (employee1 == null && employee2 == null) {
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<Employee> selectByCondition(Employee employee) {
+        return employeeDao.selectByCondition(employee);
     }
 
 

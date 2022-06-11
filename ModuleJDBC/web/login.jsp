@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>login</title>
-    <link href="css/login.css" rel="stylesheet">
+    <link href="assets/css/login.css" rel="stylesheet">
 </head>
 
 <body>
@@ -13,15 +13,15 @@
     <form action="/login" method="post" id="form">
         <h1 id="loginMsg">LOGIN IN</h1>
         <div id="errorMsg">${login_msg} ${register_msg}</div>
-        <p>Username:<input id="username" name="username" value="${cookie.username.value}" type="text"></p>
+        <p>员工编号:<input id="userid" name="userid" value="${cookie.userid.value}" type="text"></p>
 
-        <p>Password:<input id="password" name="password" value="${cookie.password.value}" type="password"></p>
-        <p>Remember:<input id="remember" name="remember" value="1" type="checkbox"></p>
+        <p>登录密码:<input id="password" name="password" value="${cookie.password.value}" type="password"></p>
+        <p>记住我:<input id="remember" name="remember" value="1" type="checkbox"></p>
         <div id="subDiv">
-            <input type="submit" class="button" value="login up">
-            <input type="reset" class="button" value="reset">&nbsp;&nbsp;&nbsp;
+            <input id="loginb" type="submit" class="button" value="login up">
             <a href="register.jsp">注册</a>
         </div>
+        <div class="misspwtips"><span>忘记密码请联系管理员！</span></div>
     </form>
 </div>
 

@@ -12,6 +12,7 @@ import java.util.Map;
 public class XmlParser {
     public static Map<String, String> parse(String xmlName) {
         Map<String, String> map = null;
+//        Map<String, String> map = new HashMap();
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
 //            实例化一个saxParserFactory对象

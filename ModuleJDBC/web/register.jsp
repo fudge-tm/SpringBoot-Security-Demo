@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>欢迎注册</title>
-    <link href="css/register.css" rel="stylesheet">
+    <link href="assets/css/register2.css" rel="stylesheet">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
         <table>
 
             <tr>
-                <td>用户编号</td>
+                <td>员工编号</td>
                 <td class="inputs">
                     <input name="userid" type="text" id="userid">
                     <br>
@@ -27,7 +27,7 @@
 
             </tr>
             <tr>
-                <td>用户名称</td>
+                <td>员工名称</td>
                 <td class="inputs">
                     <input name="username" type="text" id="username">
                     <br>
