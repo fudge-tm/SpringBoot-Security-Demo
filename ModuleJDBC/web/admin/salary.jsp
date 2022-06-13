@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -59,7 +62,7 @@
                         <a href="#"><i class="fa fa-user"></i> <span> 员工基本信息管理</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="employees.jsp">员工基本信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/employee/selectAll">员工基本信息</a></li>
                             <li><a href="emp_insert.jsp">新增员工信息</a></li>
                             <li><a href="emp_update.jsp">修改员工信息</a></li>
                         </ul>
@@ -68,7 +71,7 @@
                         <a href="#"><i class="fa fa-id-card"></i> <span> 员工职位信息管理</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="empstitle.jsp">员工职位信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/title/selectAll">员工职位信息</a></li>
                             <li><a href="title_insert.jsp">新增员工职位信息</a></li>
                             <li><a href="title_update.jsp">修改员工职位信息</a></li>
                         </ul>
@@ -78,7 +81,8 @@
                         <a href="#"><i class="fa fa-book"></i> <span> 员工工资信息管理 </span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a class="active" href="salary.jsp">员工工资信息</a></li>
+                            <li><a class="active" href="${pageContext.request.contextPath}/admin/salary/selectAll">员工工资信息</a>
+                            </li>
                             <li><a href="salary_insert.jsp">新增员工工资信息</a></li>
                             <li><a href="salary_update.jsp">修改员工工资信息</a></li>
                         </ul>
@@ -98,81 +102,76 @@
                             class="fa fa-plus"></i> 增加工资信息</a>
                 </div>
             </div>
-            <div class="row filter-row">
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                    <div class="form-group form-focus">
-                        <label class="focus-label">员工 ID</label>
-                        <input type="text" class="form-control floating">
+            <form action="/admin/salary/selectPageAndCondition" method="post">
+                <div class="row filter-row">
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                        <div class="form-group form-focus">
+                            <label class="focus-label">员工 ID</label>
+                            <input type="text" class="form-control floating" name="salaryeid" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                        <div class="form-group form-focus">
+                            <label class="focus-label">职位 ID</label>
+                            <input type="text" class="form-control floating" name="salarytid" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                        <button type="submit" class="btn btn-success btn-block"> 查询</button>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                    <div class="form-group form-focus">
-                        <label class="focus-label">职位 ID</label>
-                        <input type="text" class="form-control floating">
-                    </div>
-                </div>
-
-
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                    <a href="#" class="btn btn-success btn-block"> 查询 </a>
-                </div>
-            </div>
+            </form>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table table-striped custom-table">
                             <thead>
                             <tr>
-
+                                <th><input type="checkbox" onclick="allcheck(this)"></th>
                                 <th style="min-width:200px;">员工 ID</th>
                                 <th>职位 ID</th>
                                 <th>工资</th>
                                 <th>员工工资标记</th>
-                                <th>批量删除</th>
-                                <th class="text-right">操作</th>
+                                <th class="text-right"><input type="button" value="批量删除" onclick="delall()">&nbsp;&nbsp;操作
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-
-
-                                <td>e00</td>
-                                <td>t01</td>
-                                <td>3600</td>
-                                <td>1</td>
-                                <td>单选框</td>
-
-                                <td class="text-right">
-                                    <div class="dropdown dropdown-action">
-                                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-                                           aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="salary_update.jsp"><i
-                                                    class="fa fa-pencil m-r-5"></i> 编辑</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal"
-                                               data-target="#delete_employee"><i
-                                                    class="fa fa-trash-o m-r-5"></i> 删除</a>
+                            <c:forEach items="${salaries}" var="Salary" varStatus="status">
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="check" value=${Salary.eid}>
+                                        <input style="display: none" type="checkbox" name="checktid"
+                                               value=${Salary.tid}>
+                                    </td>
+                                    <td>
+                                        <img width="28" height="28" src="../assets/img/user.jpg" class="rounded-circle"
+                                             alt="">
+                                        <h2>${Salary.eid}</h2>
+                                    </td>
+                                    <td>${Salary.tid}</td>
+                                    <td>${Salary.smoney}</td>
+                                    <td>${Salary.flag}</td>
+                                    <td class="text-right">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <button onclick="updbyids('${Salary.eid}','${Salary.tid}')"
+                                                        class="dropdown-item">
+                                                    <i class="fa fa-pencil m-r-5"></i> 编辑
+                                                </button>
+                                                <button onclick="delbyids('${Salary.eid}','${Salary.tid}')"
+                                                        class="dropdown-item">
+                                                    <i class="fa fa-trash-o m-r-5"></i> 删除
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-
+                                    </td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 删除工资提示 -->
-    <div id="delete_employee" class="modal fade delete-modal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <img src="../assets/img/sent.png" alt="" width="50" height="46">
-                    <h3>Are you sure want to delete this Salary?</h3>
-                    <div class="m-t-20"><a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                 </div>
             </div>
@@ -190,6 +189,7 @@
 <script src="../assets/js/moment.min.js"></script>
 <script src="../assets/js/bootstrap-datetimepicker.min.js"></script>
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/allSalary.js"></script>
 </body>
 
 </html>

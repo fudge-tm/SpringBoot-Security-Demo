@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -55,7 +58,7 @@
                         <a href="#"><i class="fa fa-user"></i> <span> 员工基本信息管理</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="employees.jsp">员工基本信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/employee/selectAll">员工基本信息</a></li>
                             <li><a href="emp_insert.jsp">新增员工信息</a></li>
                             <li><a href="emp_update.jsp">修改员工信息</a></li>
                         </ul>
@@ -64,7 +67,7 @@
                         <a href="#"><i class="fa fa-id-card"></i> <span> 员工职位信息管理</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="empstitle.jsp">员工职位信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/title/selectAll">员工职位信息</a></li>
                             <li><a href="title_insert.jsp">新增员工职位信息</a></li>
                             <li><a class="active" href="title_update.jsp">修改员工职位信息</a></li>
                         </ul>
@@ -74,7 +77,7 @@
                         <a href="#"><i class="fa fa-book"></i> <span> 员工工资信息管理 </span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="salary.jsp">员工工资信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/salary/selectAll">员工工资信息</a></li>
                             <li><a href="salary_insert.jsp">新增员工工资信息</a></li>
                             <li><a href="salary_update.jsp">修改员工工资信息</a></li>
                         </ul>
@@ -94,17 +97,20 @@
                 <div class="col-md-6">
                     <div class="card-box">
                         <h4 class="card-title">修改职位信息</h4>
-                        <form action="#">
+                        <form action="/admin/title/updateTitle" id="titleupdform">
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label">职位 ID</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" disabled="disabled">
+                                    <input required id="updtitleID" type="text" class="form-control"
+                                           value="${updateTitle.tid}" name="titletid" maxlength="3">
+                                    <span id="titleid_err" class="err_msg" style="color: red"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label">修改后的职位名称</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" maxlength="10">
+                                    <input required type="text" class="form-control" maxlength="10" name="titletname"
+                                           value="${updateTitle.tname}">
                                 </div>
                             </div>
                             <div class="text-right">
@@ -127,6 +133,59 @@
 <script src="../assets/js/jquery.slimscroll.js"></script>
 <script src="../assets/js/select2.min.js"></script>
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/axios-0.18.0.js"></script>
+<script>
+    window.onload = function removetitleses() {
+        // console.log("失去焦点");
+        var value = "updateTitle";
+        axios({
+            method: "get",
+            url: "http://localhost:8080/admin/title/updateTitle?removeflag=true&updateTitle=" + value
+        }).then(function (resp) {
+        })
+    }
+
+
+    var exitedID = true;
+    var updtitleID = document.getElementById("updtitleID");
+    var titleid_err = document.getElementById("titleid_err");
+    updtitleID.onblur = checkEmpID;
+
+    function checkEmpID() {
+        // console.log("失去焦点");
+        var value = updtitleID.value;
+        axios({
+            method: "get",
+            url: "http://localhost:8080/admin/title/updateTitle?idflag=true&titletid=" + value
+        }).then(function (resp) {
+            if (resp.data == "success") {
+                // alert("##" + resp.data + "##");
+                updtitleID.value = '';
+                titleid_err.innerText = '职位 ID不存在！';
+                exitedID = false;
+                // console.log("exited" + exitedID);
+
+            } else {
+                // alert("##" + resp.data + "##");
+                titleid_err.innerText = '';
+                exitedID = true;
+            }
+        })
+    }
+
+    //1. 获取表单对象
+    var titleupdform = document.getElementById("titleupdform");
+
+    //2. 绑定onsubmit 事件
+    titleupdform.onsubmit = function () {
+        //挨个判断表单项是否符合要求，如果有不合符，则返回false
+
+        var flag = exitedID;
+        return flag;
+    }
+
+
+</script>
 </body>
 
 </html>

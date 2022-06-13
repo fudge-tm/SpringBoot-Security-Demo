@@ -5,9 +5,13 @@ import cn.edu.lingnan.pojo.Employee;
 import java.util.List;
 
 public interface EmployeeDao {
-    public Employee querySingleByeid(Class<Employee> clazz, Object... parameters);
 
-    public Employee queryhisSingleByeid(Class<Employee> clazz, Object... parameters);
+    //        由员工id查询
+    Employee querySingleByeidUnadmin(Class<Employee> clazz, String eid);
+
+    Employee querySingleByeid(Class<Employee> clazz, String eid);
+
+    Employee queryhisSingleByeid(Class<Employee> clazz, String eid);
 
     public List<Employee> queryAllEmployee(Class<Employee> clazz);
 
@@ -18,6 +22,8 @@ public interface EmployeeDao {
     public List<Employee> queryMultiByename(Class<Employee> clazz, String ename);
 
     public boolean updateEmployee(Employee e);
+
+    boolean updateEmployeeSuperuser(Employee e);
 
     public boolean updateEmployeePassword(String ename, String newPassword);
 

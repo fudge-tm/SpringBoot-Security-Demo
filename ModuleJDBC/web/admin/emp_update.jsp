@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -55,7 +58,7 @@
                         <a href="#"><i class="fa fa-user"></i> <span> 员工基本信息管理</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="employees.jsp">员工基本信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/employee/selectAll">员工基本信息</a></li>
                             <li><a href="emp_insert.jsp">新增员工信息</a></li>
                             <li><a class="active" href="emp_update.jsp">修改员工信息</a></li>
                         </ul>
@@ -64,7 +67,7 @@
                         <a href="#"><i class="fa fa-id-card"></i> <span> 员工职位信息管理</span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="empstitle.jsp">员工职位信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/title/selectAll">员工职位信息</a></li>
                             <li><a href="title_insert.jsp">新增员工职位信息</a></li>
                             <li><a href="title_update.jsp">修改员工职位信息</a></li>
                         </ul>
@@ -74,7 +77,7 @@
                         <a href="#"><i class="fa fa-book"></i> <span> 员工工资信息管理 </span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="salary.jsp">员工工资信息</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/salary/selectAll">员工工资信息</a></li>
                             <li><a href="salary_insert.jsp">新增员工工资信息</a></li>
                             <li><a href="salary_update.jsp">修改员工工资信息</a></li>
                         </ul>

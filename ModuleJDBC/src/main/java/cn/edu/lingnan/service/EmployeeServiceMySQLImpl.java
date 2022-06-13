@@ -19,13 +19,18 @@ public class EmployeeServiceMySQLImpl implements EmployeeService {
 
     //由员工id查询
     @Override
-    public Employee querySingleByeid(Class<Employee> clazz, Object... parameters) {
-        return employeeDao.querySingleByeid(clazz, parameters);
+    public Employee querySingleByeid(Class<Employee> clazz, String eid) {
+        return employeeDao.querySingleByeid(clazz, eid);
     }
 
     @Override
-    public Employee querySingleByeidUnadmin(Class<Employee> clazz, Object... parameters) {
-        return employeeDao.querySingleByeidUnadmin(clazz, parameters);
+    public Employee querySingleByeidUnadmin(Class<Employee> clazz, Employee employee) {
+        return employeeDao.querySingleByeidUnadmin(clazz, employee.getEid());
+    }
+
+    @Override
+    public boolean updateEmployeeSuperuser(Employee e) {
+        return employeeDao.updateEmployeeSuperuser(e);
     }
 
 

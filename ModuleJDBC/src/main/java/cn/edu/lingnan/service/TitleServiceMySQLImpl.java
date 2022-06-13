@@ -20,10 +20,30 @@ public class TitleServiceMySQLImpl implements TitleService {
         return titleDao.querySingleBytid(clazz, tid);
     }
 
+    public Title queryhisSingleBytid(Class<Title> clazz, String tid) {
+        return titleDao.queryhisSingleBytid(Title.class, tid);
+    }
+
     //        由职位名称查询职位信息
     @Override
     public List<Title> queryMultiBytname(Class<Title> clazz, String tname) {
         return titleDao.queryMultiBytname(clazz, tname);
+    }
+
+    //    按条件查询
+    @Override
+    public List<Title> selectByCondition(Title title) {
+        return titleDao.selectByCondition(title);
+    }
+
+    @Override
+    public boolean unexittid(Title title) {
+        Title title1 = titleDao.querySingleBytid(Title.class, title.getTid());
+        Title title2 = titleDao.queryhisSingleBytid(Title.class, title.getTid());
+        if (title1 == null && title2 == null) {
+            return true;
+        }
+        return false;
     }
 
     //        查询所有职位信息

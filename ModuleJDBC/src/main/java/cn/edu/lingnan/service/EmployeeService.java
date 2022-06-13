@@ -9,9 +9,13 @@ import java.util.List;
  * EmployeeService接口
  */
 public interface EmployeeService {
-    public Employee querySingleByeid(Class<Employee> clazz, Object... parameters);
 
-    Employee querySingleByeidUnadmin(Class<Employee> clazz, Object... parameters);
+    //由员工id查询
+    Employee querySingleByeid(Class<Employee> clazz, String eid);
+
+    Employee querySingleByeidUnadmin(Class<Employee> clazz, Employee employee);
+
+    boolean updateEmployeeSuperuser(Employee e);
 
     public List<Employee> queryAllEmployee(Class<Employee> clazz);
 

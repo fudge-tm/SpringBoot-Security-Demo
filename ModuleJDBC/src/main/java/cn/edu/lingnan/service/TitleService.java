@@ -13,6 +13,11 @@ public interface TitleService {
 
     public List<Title> queryMultiBytname(Class<Title> clazz, String tname);
 
+    //    按条件查询
+    List<Title> selectByCondition(Title title);
+
+    boolean unexittid(Title title);
+
     public List<Title> queryMultiAllTitle();
 
     public boolean deleteTitle(Title t);

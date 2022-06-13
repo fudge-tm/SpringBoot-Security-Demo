@@ -13,6 +13,11 @@ public interface TitleDao {
 
     public List<Title> queryMultiAllTitle();
 
+    Title queryhisSingleBytid(Class<Title> clazz, String tid);
+
+    //按条件查询
+    List<Title> selectByCondition(Title title);
+
     public List<Title> queryMultiBytname(Class<Title> clazz, String tname);
 
     public Title querySingleBytid(Class<Title> clazz, String tid);

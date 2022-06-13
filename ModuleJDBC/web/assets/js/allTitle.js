@@ -12,20 +12,20 @@ function allcheck(checkbox) {
 }
 
 function delall() {
-    var alleid = new Array();
+    var alltid = new Array();
     var flag = false;
     var oCheck = document.getElementsByName("check");
     for (var i = 0; i < oCheck.length; i++) {
         if (oCheck[i].checked == true) { //需要删除的编号
-            alleid.push(oCheck[i].value);
+            alltid.push(oCheck[i].value);
             flag = true;
         }
     }
 
     if (flag == true) {
-        if (confirm("您确定要删除这些员工基本信息记录吗?")) {
+        if (confirm("您确定要删除这些职位吗?")) {
             // console.log(alleid);
-            location.href = "/admin/employee/deleteEmp?flag=all&eid=" + alleid;
+            location.href = "/admin/title/deleteTitle?flag=all&titletid=" + alltid;
         }
     } else {
         alert("您至少要选择一条待删除的记录！");
@@ -35,17 +35,14 @@ function delall() {
 
 function delbyids(a) {
     // alert("sss");
-    if (confirm("您确定要删除这条员工基本信息记录吗?")) {
+    if (confirm("您确定要删除该职位吗?")) {
         // console.log(alleid);
-        location.href = "/admin/employee/deleteEmp?eid=" + a;
+        location.href = "/admin/title/deleteTitle?titletid=" + a;
     }
 
 }
 
 function updbyids(a) {
-    // alert("sss");
-    // console.log(alleid);
-    // alert("发请求");
-    location.href = "/admin/employee/updateEmp?flag=true&eid=" + a;
+    // alert("职位发请求");
+    location.href = "/admin/title/updateTitle?flag=true&titletid=" + a;
 }
-

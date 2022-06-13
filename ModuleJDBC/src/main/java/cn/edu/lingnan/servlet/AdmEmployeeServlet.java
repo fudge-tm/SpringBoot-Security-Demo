@@ -3,14 +3,12 @@ package cn.edu.lingnan.servlet;
 import cn.edu.lingnan.pojo.Employee;
 import cn.edu.lingnan.service.EmployeeService;
 import cn.edu.lingnan.service.EmployeeServiceMySQLImpl;
-import com.alibaba.fastjson.JSON;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class AdmEmployeeServlet extends BaseServlet {
     private EmployeeService service = new EmployeeServiceMySQLImpl();
 
     public void selectAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println("进来了");
         //1. 调用EmployeeService完成查询
         List<Employee> employees = service.queryAllEmployee(Employee.class);
 
@@ -71,16 +69,14 @@ public class AdmEmployeeServlet extends BaseServlet {
         employee.setPassword(password);
         employee.setSuperuser(2);
         employee.setFlag(1);
-
         // 比对
         if (flag != null) {
             boolean unexiteid = service.unexiteid(employee);
-//            System.out.println("##" + unexiteid + "##");
             if (unexiteid) {
                 response.getWriter().write("success");//success表示不存在
 
             } else {
-
+                System.out.println("已存在");
                 response.getWriter().write("fail");//fail表示已存在
 
             }
@@ -105,21 +101,6 @@ public class AdmEmployeeServlet extends BaseServlet {
      * @throws ServletException
      * @throws IOException
      */
-    public void deleteByIds(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //    1.接收数据[1,2,3]
-        BufferedReader br = request.getReader();
-        String params = br.readLine();//json字符串
-        System.out.println("come");
-//        转为int[]数组
-        String[] ids = JSON.parseObject(params, String[].class);
-        for (int i = 0; i < ids.length; i++) {
-            System.out.println(ids[i]);
-        }
-        service.deleteByIds(ids);
-//        3.响应成功标识
-        response.getWriter().write("success");
-    }
-
     public void deleteEmp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String eid = request.getParameter("eid");
         String flag = request.getParameter("flag");
@@ -169,9 +150,10 @@ public class AdmEmployeeServlet extends BaseServlet {
         }
         if ("true".equals(idflag)) {//异步检测id
 //            System.out.println("异步检测id");
-            boolean unexiteid = service.unexiteid(employee);
+            Employee employee1 = service.querySingleByeid(Employee.class, employee.getEid());
 //            System.out.println("##" + unexiteid + "##");
-            if (unexiteid) {
+            if (employee1 == null) {
+//                System.out.println("不存在");
                 response.getWriter().write("success");//success表示不存在
 
             } else {
@@ -201,6 +183,16 @@ public class AdmEmployeeServlet extends BaseServlet {
         }
 
 
+    }
+
+    public void updateEmployeeSuperuser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String eid = request.getParameter("eid");
+        Employee employee = new Employee();
+        employee.setEid(eid);
+        employee.setSuperuser(1);
+        boolean b = service.updateEmployeeSuperuser(employee);
+        System.out.println(b);
+        response.sendRedirect("/admin/employee/selectAll");
     }
 
 

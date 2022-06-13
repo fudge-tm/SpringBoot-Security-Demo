@@ -1,13 +1,8 @@
 package cn.edu.lingnan.dao;
 
 import cn.edu.lingnan.pojo.Title;
-import cn.edu.lingnan.utils.JDBCUtilsByDruid;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,36 +12,45 @@ public class TitleDaoMySQLImpl extends BasicDAO<Title> implements TitleDao {
     private QueryRunner qrt = new QueryRunner();
 
     //        由职位id查询职位信息
+    @Override
     public Title querySingleBytid(Class<Title> clazz, String tid) {
-        Connection connection = null;
+
 //        String sql="select * from title where tid ='"+tid+"'";
         String sql = "select * from title where tid = ?";
-        try {
-            connection = JDBCUtilsByDruid.getConnection();
-            return qrt.query(connection, sql, new BeanHandler<Title>(clazz), tid);
+        return querySingle(sql, clazz, tid);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
+    }
+
+    @Override
+    public Title queryhisSingleBytid(Class<Title> clazz, String tid) {
+
+//        String sql="select * from title where tid ='"+tid+"'";
+        String sql = "select * from history_title where tid = ?";
+        return querySingle(sql, clazz, tid);
+
+    }
+
+    //按条件查询
+    @Override
+    public List<Title> selectByCondition(Title title) {
+        String sql = "select * from title where 1=1";
+        if (title != null) {
+            if ((title.getTid() != null) && (title.getTid().length() > 0)) {
+                sql = sql + " and tid like '%" + title.getTid() + "%'";
+            }
+            if ((title.getTname() != null) && (title.getTname().length() > 0)) {
+                sql = sql + " and tname like '%" + title.getTname() + "%'";
+            }
         }
-
+        return queryMulti(sql, Title.class);
     }
 
     //        由职位名称查询职位信息
     public List<Title> queryMultiBytname(Class<Title> clazz, String tname) {
-        Connection connection = null;
         tname = "%" + tname + "%";
         String sql = "select * from title where tname like ?";
-        try {
-            connection = JDBCUtilsByDruid.getConnection();
-            return qrt.query(connection, sql, new BeanListHandler<Title>(clazz), tname);
+        return queryMulti(sql, clazz, tname);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
-        }
     }
 
     //        查询所有职位信息

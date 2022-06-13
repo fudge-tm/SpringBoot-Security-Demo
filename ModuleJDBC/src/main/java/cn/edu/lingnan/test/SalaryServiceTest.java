@@ -11,7 +11,7 @@ public class SalaryServiceTest {
         Salary s = new Salary("e01", "t01", 10000.0, 1);
 
         //由员工id和职位id查询工资
-        System.out.println(salaryServiceMySQL.querySingleBysid(Salary.class, "e01", "t01"));
+        System.out.println(salaryServiceMySQL.querySingleBysid(Salary.class, s));
 
         //        由员工id查询工资
         System.out.println(salaryServiceMySQL.queryMultiByeid(Salary.class, "e01"));

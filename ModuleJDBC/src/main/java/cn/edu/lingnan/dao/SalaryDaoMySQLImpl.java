@@ -1,13 +1,8 @@
 package cn.edu.lingnan.dao;
 
 import cn.edu.lingnan.pojo.Salary;
-import cn.edu.lingnan.utils.JDBCUtilsByDruid;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,48 +12,73 @@ public class SalaryDaoMySQLImpl extends BasicDAO<Salary> implements SalaryDao {
     private QueryRunner qrs = new QueryRunner();
 
     //由员工id和职位id查询工资
-    public Salary querySingleBysid(Class<Salary> clazz, Object... parameters) {
-        Connection connection = null;
-//              String sql="select * from salary where eid='"+eid+"'and tid='"+tid+"'";
-        String sql = "select * from salary where eid= ? and tid= ?";
-        try {
-            connection = JDBCUtilsByDruid.getConnection();
-            return qrs.query(connection, sql, new BeanHandler<Salary>(clazz), parameters);
+    @Override
+    public Salary querySingleBysid(Class<Salary> clazz, Salary salary) {
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
-        }
+        String sql = "select * from salary where eid= ? and tid= ?";
+
+        return querySingle(sql, clazz, salary.getEid(), salary.getTid());
+
     }
 
-//   public T querySingle(String sql, Class<T> clazz, Object... parameters) {
-//
-//       Connection connection = null;
-//       try {
-//           connection = JDBCUtilsByDruid.getConnection();
-//           return  qr.query(connection, sql, new BeanHandler<T>(clazz), parameters);
-//
-//       } catch (SQLException e) {
-//           throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
-//       } finally {
-//           JDBCUtilsByDruid.close(null, null, connection);
-//       }
-//   }
+    @Override
+    public Salary queryhisSingleBysid(Class<Salary> clazz, Salary salary) {
+
+        String sql = "select * from history_salary where eid= ? and tid= ?";
+
+        return querySingle(sql, clazz, salary.getEid(), salary.getTid());
+
+    }
+
+    @Override
+    public Salary querySingleByeid(Class<Salary> clazz, Salary salary) {
+        String sql = "select * from salary where eid= ?";
+        return querySingle(sql, clazz, salary.getEid());
+
+    }
+
+    @Override
+    public Salary querySingleBytid(Class<Salary> clazz, Salary salary) {
+        String sql = "select * from salary where tid= ?";
+        return querySingle(sql, clazz, salary.getTid());
+
+    }
+
+    @Override
+    public Salary queryhisSingleByeid(Class<Salary> clazz, Salary salary) {
+        String sql = "select * from history_salary where eid= ?";
+        return querySingle(sql, clazz, salary.getEid());
+
+    }
+
+    @Override
+    public Salary queryhisSingleBytid(Class<Salary> clazz, Salary salary) {
+        String sql = "select * from history_salary where tid= ?";
+        return querySingle(sql, clazz, salary.getTid());
+
+    }
+
+
+    //按条件查询
+    @Override
+    public List<Salary> selectByCondition(Salary salary) {
+        String sql = "select * from salary where 1=1";
+        if (salary != null) {
+            if ((salary.getEid() != null) && (salary.getEid().length() > 0)) {
+                sql = sql + " and eid like '%" + salary.getEid() + "%'";
+            }
+            if ((salary.getTid() != null) && (salary.getTid().length() > 0)) {
+                sql = sql + " and tid like '%" + salary.getTid() + "%'";
+            }
+        }
+        return queryMulti(sql, Salary.class);
+    }
 
     //        由员工id查询工资
     public List<Salary> queryMultiByeid(Class<Salary> clazz, String eid) {
-        Connection connection = null;
-        String sql = "select * from salary where eid = ?";
-        try {
-            connection = JDBCUtilsByDruid.getConnection();
-            return qrs.query(connection, sql, new BeanListHandler<Salary>(clazz), eid);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
-        }
+        String sql = "select * from salary where eid = ?";
+        return queryMulti(sql, clazz, eid);
     }
 
     //        查询所有工资

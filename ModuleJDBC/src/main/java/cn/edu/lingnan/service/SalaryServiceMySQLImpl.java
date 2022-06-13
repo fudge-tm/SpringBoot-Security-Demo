@@ -3,9 +3,7 @@ package cn.edu.lingnan.service;
 import cn.edu.lingnan.dao.EmployeeDaoMySQLImpl;
 import cn.edu.lingnan.dao.SalaryDaoMySQLImpl;
 import cn.edu.lingnan.dao.TitleDaoMySQLImpl;
-import cn.edu.lingnan.pojo.Employee;
 import cn.edu.lingnan.pojo.Salary;
-import cn.edu.lingnan.pojo.Title;
 
 import java.util.List;
 
@@ -20,8 +18,15 @@ public class SalaryServiceMySQLImpl implements SalaryService {
 
     //由员工id和职位id查询工资
     @Override
-    public Salary querySingleBysid(Class<Salary> clazz, Object... parameters) {
-        return null;
+    public Salary querySingleBysid(Class<Salary> clazz, Salary salary) {
+
+        return salaryDao.querySingleBysid(clazz, salary);
+    }
+
+    //    按条件查询
+    @Override
+    public List<Salary> selectByCondition(Salary salary) {
+        return salaryDao.selectByCondition(salary);
     }
 
     //        由员工id查询工资
@@ -31,6 +36,11 @@ public class SalaryServiceMySQLImpl implements SalaryService {
 //       List<Salary> salaries=salaryDao.queryMulti(sql,clazz,eid);
         List<Salary> salaries = salaryDao.queryMultiByeid(clazz, eid);
         return salaries;
+    }
+
+    @Override
+    public Salary queryhisSingleBysid(Class<Salary> clazz, Salary salary) {
+        return salaryDao.queryhisSingleBysid(clazz, salary);
     }
 
     //        查询所有工资
@@ -51,63 +61,44 @@ public class SalaryServiceMySQLImpl implements SalaryService {
         return salaryDao.deleteSalary(s);
     }
 
+    @Override
+    public boolean unexitsid(Salary salary) {
+        Salary salary1 = salaryDao.querySingleBysid(Salary.class, salary);
+        Salary salary2 = salaryDao.queryhisSingleBysid(Salary.class, salary);
+        if (salary1 == null && salary2 == null) {
+            return true;
+        }
+        return false;
+    }
+
     //        插入工资记录
     @Override
     public boolean insertSalary(Salary s) {
         boolean flag1 = false;
         boolean flag2 = false;
         boolean flag3 = true;
-        List<Salary> salarys = salaryDao.queryMultiAllSalary();
-
-        List<Employee> employees = employeeDao.queryMultiAllEmployee();
-        List<Title> titles = titleDao.queryMultiAllTitle();
-
-//        for (Salary salary : salarys) {
-//            if ((salary.getEid().equals(s.getEid())) && (salary.getTid().equals(s.getTid()))) {
-//                flag1 = true;
-//            }
+//        List<Salary> salarys = salaryDao.queryMultiAllSalary();
+//
+//        List<Employee> employees = employeeDao.queryMultiAllEmployee();
+//        List<Title> titles = titleDao.queryMultiAllTitle();
+//        if ((employeeDao.querySingleByeid(Employee.class, s.getEid()) != null)) {
+//            flag1 = true;
+//        }
+//        if (flag1 == false) {
+//            return false;
+//        }
+//
+//        if (titleDao.querySingleBytid(Title.class, s.getTid()) != null) {
+//            flag2 = true;
+//        }
+//        if (flag1 == false || flag2 == false) {
+//            return false;
 //        }
 
-//        for (Salary salary : salarys) {
-//            if (salary.getEid().equals(s.getEid())){
-//                flag1 = true;
-//            }
-//        }
-
-//        for (Employee employee : employees) {
-//            if (employee.getEid().equals(s.getEid())) {
-//                flag1 = true;
-//            }
-//        }
-        if ((employeeDao.querySingleByeid(Employee.class, s.getEid()) != null)) {
-            flag1 = true;
-        }
-        if (flag1 == false) {
-            return false;
-        }
-
-        if (titleDao.querySingleBytid(Title.class, s.getTid()) != null) {
-            flag2 = true;
-        }
-//        for (Title title : titles) {
-//            if (title.getTid().equals(s.getTid())) {
-//                flag2 = true;
-//            }
-//        }
-
-        if (flag1 == false || flag2 == false) {
-            return false;
-        }
-
-        if (salaryDao.querySingleBysid(Salary.class, s.getEid(), s.getTid()) != null) {
+        if (salaryDao.querySingleBysid(Salary.class, s) != null) {
             flag3 = true;
         }
 
-//        for (Salary salary : salarys) {
-//            if ((salary.getEid().equals(s.getEid())) && (salary.getTid().equals(s.getTid()))) {
-//                flag3 = false;
-//            }
-//        }
         if (flag3 == false) {
             return false;
         }

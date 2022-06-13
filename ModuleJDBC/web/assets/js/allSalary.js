@@ -13,19 +13,22 @@ function allcheck(checkbox) {
 
 function delall() {
     var alleid = new Array();
+    var alltid = new Array();
     var flag = false;
     var oCheck = document.getElementsByName("check");
+    var checktid = document.getElementsByName("checktid");
     for (var i = 0; i < oCheck.length; i++) {
         if (oCheck[i].checked == true) { //需要删除的编号
             alleid.push(oCheck[i].value);
+            alltid.push(checktid[i].value);
             flag = true;
         }
     }
 
     if (flag == true) {
-        if (confirm("您确定要删除这些员工基本信息记录吗?")) {
+        if (confirm("您确定要删除这些员工工资信息记录吗?")) {
             // console.log(alleid);
-            location.href = "/admin/employee/deleteEmp?flag=all&eid=" + alleid;
+            location.href = "/admin/salary/deleteSalary?flag=all&eid=" + alleid + "&tid=" + alltid;
         }
     } else {
         alert("您至少要选择一条待删除的记录！");
@@ -33,19 +36,17 @@ function delall() {
 
 }
 
-function delbyids(a) {
+function delbyids(eid, tid) {
     // alert("sss");
-    if (confirm("您确定要删除这条员工基本信息记录吗?")) {
+    if (confirm("您确定要删除这条员工工资记录吗?")) {
         // console.log(alleid);
-        location.href = "/admin/employee/deleteEmp?eid=" + a;
+        location.href = "/admin/salary/deleteSalary?eid=" + eid + "&tid=" + tid;
     }
 
 }
 
-function updbyids(a) {
+function updbyids(eid, tid) {
     // alert("sss");
     // console.log(alleid);
-    // alert("发请求");
-    location.href = "/admin/employee/updateEmp?flag=true&eid=" + a;
+    location.href = "/admin/salary/updateSalary?flag=true&updeid=" + eid + "&updtid=" + tid;
 }
-
