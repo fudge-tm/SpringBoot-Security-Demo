@@ -36,7 +36,8 @@
                     <span>${employee.ename}</span>
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/logout">Logout</a>
+                    <a class="dropdown-item" href="profile.jsp">个人信息设置</a>
+                    <a class="dropdown-item" href="/logout">退出登录</a>
                 </div>
             </li>
         </ul>
@@ -79,6 +80,17 @@
                             <li><a href="${pageContext.request.contextPath}/admin/salary/selectAll">员工工资信息</a></li>
                             <li><a href="salary_insert.jsp">新增员工工资信息</a></li>
                             <li><a href="salary_update.jsp">修改员工工资信息</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="fa fa-user"></i> <span> 个人信息管理 </span> <span
+                                class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li>
+                                <a href="${pageContext.request.contextPath}/admin/profile.jsp">个人信息</a>
+                            </li>
+                            <li><a href="${pageContext.request.contextPath}/admin/edit-profile.jsp">个人信息信息修改</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -163,7 +175,7 @@
                                                 </button>
                                                 <button onclick="updateEmployeeSuperuser('${Employee.eid}')"
                                                         class="dropdown-item">
-                                                    <i class="fa fa-trash-o m-r-5"></i> 设为管理员
+                                                    <i class="fa fa-cog m-r-5"></i> 设为管理员
                                                 </button>
                                             </div>
                                         </div>

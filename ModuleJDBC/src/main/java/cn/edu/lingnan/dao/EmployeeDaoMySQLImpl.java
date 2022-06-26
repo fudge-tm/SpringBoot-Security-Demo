@@ -156,6 +156,7 @@ public class EmployeeDaoMySQLImpl extends BasicDAO<Employee> implements Employee
             }
         }
         sql = sql + " and superuser!=1";
+        System.out.println(sql);
         return queryMulti(sql, Employee.class);
     }
 

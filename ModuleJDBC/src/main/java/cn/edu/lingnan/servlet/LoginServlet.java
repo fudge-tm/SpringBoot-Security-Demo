@@ -18,21 +18,14 @@ public class LoginServlet extends HttpServlet {
         //    1.从页面获取参数
         String userid = req.getParameter("userid");
         String password = req.getParameter("password");
-//        System.out.println(username + "  " + password);
-
         //获取复选框数据
         String remember = req.getParameter("remember");
-
         Employee employee = employeeService.finstaffByidAndPassword(userid, password);
 
-
         if (employee != null) {
-
             //判断用户是否勾选记住我
             if ("1".equals(remember)) {
                 //勾选了，发送Cookie
-//                为了解决用户名是中文导致cookie乱码创建cookie时设置
-//                username= URLEncoder.encode(username,"utf-8")
                 //1. 创建Cookie对象
                 Cookie c_userid = new Cookie("userid", userid);
                 Cookie c_password = new Cookie("password", password);
@@ -42,23 +35,20 @@ public class LoginServlet extends HttpServlet {
                 //2. 发送
                 resp.addCookie(c_userid);
                 resp.addCookie(c_password);
-
-
             }
-            System.out.println(employee);
             //将登陆成功后的user对象，存储到session
             HttpSession session = req.getSession();
             session.setAttribute("employee", employee);
-//            req.getSession().setAttribute("employee", employee);
-                
-//            System.out.println("success");
-//            resp.sendRedirect(req.getContextPath() + "/selectAllEmpServlet");
-            String contextPath = req.getContextPath();
-            resp.sendRedirect(contextPath + "/admin/index.jsp");
+            if (employee.getSuperuser() == 1) {
+                String contextPath = req.getContextPath();
+                resp.sendRedirect(contextPath + "/admin/index.jsp");
+            } else if (employee.getSuperuser() == 2) {
+                String contextPath = req.getContextPath();
+                resp.sendRedirect(contextPath + "/user/profile.jsp");
+            }
+
         } else {
-
             // 登录失败,
-
             // 存储错误信息到request
             req.setAttribute("login_msg", "用户id或密码错误");
             // 跳转到login.jsp

@@ -43,53 +43,27 @@
                 </div>
             </li>
         </ul>
+
     </div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-inner slimscroll">
             <div id="sidebar-menu" class="sidebar-menu">
                 <ul>
 
-                    <li>
-                        <a href="index.jsp"><i class="fa fa-dashboard"></i> <span>统计</span></a>
-                    </li>
-
-
-                    <li class="submenu">
-                        <a href="#"><i class="fa fa-user"></i> <span> 员工基本信息管理</span> <span
-                                class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="${pageContext.request.contextPath}/admin/employee/selectAll">员工基本信息</a></li>
-                            <li><a class="active" href="emp_insert.jsp">新增员工信息</a></li>
-                            <li><a href="emp_update.jsp">修改员工信息</a></li>
-                        </ul>
-                    </li>
-                    <li class="submenu">
-                        <a href="#"><i class="fa fa-id-card"></i> <span> 员工职位信息管理</span> <span
-                                class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="${pageContext.request.contextPath}/admin/title/selectAll">员工职位信息</a></li>
-                            <li><a href="title_insert.jsp">新增员工职位信息</a></li>
-                            <li><a href="title_update.jsp">修改员工职位信息</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="submenu">
-                        <a href="#"><i class="fa fa-book"></i> <span> 员工工资信息管理 </span> <span
-                                class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="${pageContext.request.contextPath}/admin/salary/selectAll">员工工资信息</a></li>
-                            <li><a href="salary_insert.jsp">新增员工工资信息</a></li>
-                            <li><a href="salary_update.jsp">修改员工工资信息</a></li>
-                        </ul>
-                    </li>
                     <li class="submenu">
                         <a href="#"><i class="fa fa-user"></i> <span> 个人信息管理 </span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
                             <li>
-                                <a href="${pageContext.request.contextPath}/admin/profile.jsp">个人信息</a>
+                                <a href="${pageContext.request.contextPath}/user/profile.jsp">个人信息</a>
                             </li>
-                            <li><a href="${pageContext.request.contextPath}/admin/edit-profile.jsp">个人信息信息修改</a>
+                            <li><a class="active"
+                                   href="${pageContext.request.contextPath}/user/edit-profile.jsp">个人信息修改</a>
+                            </li>
+                            <li><a href="${pageContext.request.contextPath}/user/employee/selectEmployeeSalaryInfo">个人工资信息</a>
+                            </li>
+                            <li><a
+                                    href="${pageContext.request.contextPath}/user/employee/selectEmployeeTitleInfo">个人职位信息</a>
                             </li>
                         </ul>
                     </li>
@@ -101,40 +75,42 @@
         <div class="content">
             <div class="row">
                 <div class="col-sm-12">
-                    <h4 class="page-title">新增员工</h4>
+                    <h4 class="page-title">修改个人信息</h4>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="card-box">
-                        <h4 class="card-title">新增员工信息</h4>
-                        <form action="/admin/employee/add" id="empinsform">
+                        <h4 class="card-title">修改个人基本信息</h4>
+                        <form action="/user/employee/updateEmployeeInfo" id="empupdform">
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label">员工 ID</label>
                                 <div class="col-md-9">
-                                    <input required type="text" class="form-control" maxlength="3" name="empeid"
-                                           id="addempID">
+                                    <input required id="updempID" type="text" class="form-control"
+                                           value="${employee.eid}" name="eid" maxlength="3" readonly>
                                     <span id="empid_err" class="err_msg" style="color: red"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label">员工姓名</label>
+                                <label class="col-md-3 col-form-label">修改后的姓名</label>
                                 <div class="col-md-9">
-                                    <input required type="text" class="form-control" maxlength="10" name="empename">
+                                    <input required type="text" class="form-control" maxlength="10" name="empename"
+                                           value="${employee.ename}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label">密码</label>
+                                <label class="col-md-3 col-form-label">修改后的密码</label>
                                 <div class="col-md-9">
                                     <input id="password" required type="password" class="form-control" maxlength="10"
-                                           name="emppwd">
+                                           name="emppwd" value="${employee.password}">
                                     <span id="empinspwd_err" class="err_msg" style="color: red"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label">确认密码</label>
+                                <label class="col-md-3 col-form-label">再次确认密码</label>
                                 <div class="col-md-9">
-                                    <input id="acpassword" required type="password" class="form-control" maxlength="10">
+                                    <input id="acpassword" required type="password" class="form-control" maxlength="10"
+                                           value="${employee.password}">
                                     <span id="acempinspwd_err" class="err_msg" style="color: red"></span>
                                 </div>
                             </div>
@@ -160,6 +136,15 @@
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/axios-0.18.0.js"></script>
 <script>
+    // window.onload = function removeempses() {
+    //     // console.log("失去焦点");
+    //     var value = "updateEmp";
+    //     axios({
+    //         method: "get",
+    //         url: "http://localhost:8080/admin/employee/updateEmp?removeflag=true&updateEmp=" + value
+    //     }).then(function (resp) {
+    //     })
+    // }
 
     //1. 验证密码是否符合规则
     //1.1 获取密码的输入框
@@ -217,40 +202,42 @@
         return flag;
     }
 
-    var exitedID = true;
-    var addempID = document.getElementById("addempID");
-    var empid_err = document.getElementById("empid_err");
-    addempID.onblur = checkEmpID;
-
-    function checkEmpID() {
-        console.log("失去焦点");
-        var value = addempID.value;
-        axios({
-            method: "get",
-            url: "http://localhost:8080/admin/employee/add?flag=true&empeid=" + value
-        }).then(function (resp) {
-            if (resp.data == "fail") {//fail表示已存在
-                addempID.value = '';
-                empid_err.innerText = '员工 ID已存在！';
-                exitedID = false;
-                console.log("exited" + exitedID);
-
-            } else {
-                empid_err.innerText = '';
-                exitedID = true;
-            }
-        })
-    }
+    // var exitedID = true;
+    // var updempID = document.getElementById("updempID");
+    // var empid_err = document.getElementById("empid_err");
+    // updempID.onblur = checkEmpID;
+    //
+    // function checkEmpID() {
+    //     // console.log("失去焦点");
+    //     var value = updempID.value;
+    //     axios({
+    //         method: "get",
+    //         url: "http://localhost:8080/admin/employee/updateEmp?idflag=true&eid=" + value
+    //     }).then(function (resp) {
+    //         if (resp.data == "success") {
+    //             // alert("##" + resp.data + "##");
+    //             updempID.value = '';
+    //             empid_err.innerText = '员工 ID不存在！';
+    //             exitedID = false;
+    //             console.log("exited" + exitedID);
+    //
+    //         } else {
+    //             // alert("##" + resp.data + "##");
+    //             empid_err.innerText = '';
+    //             exitedID = true;
+    //         }
+    //     })
+    // }
 
     //1. 获取表单对象
-    var empinsform = document.getElementById("empinsform");
+    var empupdform = document.getElementById("empupdform");
 
     //2. 绑定onsubmit 事件
-    empinsform.onsubmit = function () {
+    empupdform.onsubmit = function () {
         //挨个判断每一个表单项是否都符合要求，如果有一个不合符，则返回false
 
-        var flag = exitedID && checkPassword() && checkacPassword();
-        console.log(exitedID + "  " + checkPassword() + "  " + checkPassword())
+        var flag = checkPassword() && checkacPassword();
+        // console.log(exitedID + "  " + checkPassword() + "  " + checkPassword())
         // alert(flag);
         // if (flag) {
         //     //符合规则
@@ -264,7 +251,6 @@
 
 
 </script>
-
 </body>
 
 </html>

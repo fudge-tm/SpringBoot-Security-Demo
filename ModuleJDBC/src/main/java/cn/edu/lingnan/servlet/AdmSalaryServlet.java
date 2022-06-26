@@ -31,7 +31,7 @@ public class AdmSalaryServlet extends BaseServlet {
     }
 
     public void selectPageAndCondition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         String salaryeid = request.getParameter("salaryeid");
         String salarytid = request.getParameter("salarytid");
 
@@ -61,10 +61,13 @@ public class AdmSalaryServlet extends BaseServlet {
         salary.setTid(salarytid);
         salary.setFlag(1);
 //        System.out.println(salary);
+        Employee employee = new Employee();
+        employee.setEid(salary.getEid());
+
 
         // 比对
         if (flag != null) {
-            Employee exitedemployee1 = Empservice.querySingleByeid(Employee.class, salary.getEid());
+            Employee exitedemployee1 = Empservice.querySingleByeidUnadmin(Employee.class, employee);
             boolean unexitsid = salaryService.unexitsid(salary);
             Title exitedtitle = titleService.querySingleBytid(Title.class, salary.getTid());
 //            System.out.println("flag!=null");

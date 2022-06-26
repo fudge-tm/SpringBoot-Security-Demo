@@ -70,7 +70,7 @@
                         <ul style="display: none;">
                             <li><a href="${pageContext.request.contextPath}/admin/title/selectAll">员工职位信息</a></li>
                             <li><a href="title_insert.jsp">新增员工职位信息</a></li>
-                            <li><a class="active" href="title_update.jsp">修改员工职位信息</a></li>
+                            <li><a href="title_update.jsp">修改员工职位信息</a></li>
                         </ul>
                     </li>
 
@@ -90,7 +90,7 @@
                             <li>
                                 <a href="${pageContext.request.contextPath}/admin/profile.jsp">个人信息</a>
                             </li>
-                            <li><a href="${pageContext.request.contextPath}/admin/edit-profile.jsp">个人信息信息修改</a>
+                            <li class="active"><a href="${pageContext.request.contextPath}/admin/edit-profile.jsp">个人信息信息修改</a>
                             </li>
                         </ul>
                     </li>
@@ -102,27 +102,43 @@
         <div class="content">
             <div class="row">
                 <div class="col-sm-12">
-                    <h4 class="page-title">修改职位</h4>
+                    <h4 class="page-title">修改个人信息</h4>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="card-box">
-                        <h4 class="card-title">修改职位信息</h4>
-                        <form action="/admin/title/updateTitle" id="titleupdform">
+                        <h4 class="card-title">修改个人基本信息</h4>
+                        <form action="/admin/employee/updateAdmEmployeeInfo" id="empupdform">
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label">职位 ID</label>
+                                <label class="col-md-3 col-form-label">员工 ID</label>
                                 <div class="col-md-9">
-                                    <input required id="updtitleID" type="text" class="form-control"
-                                           value="${updateTitle.tid}" name="titletid" maxlength="3">
-                                    <span id="titleid_err" class="err_msg" style="color: red"></span>
+                                    <input required id="updempID" type="text" class="form-control"
+                                           value="${employee.eid}" name="eid" maxlength="3" readonly>
+                                    <span id="empid_err" class="err_msg" style="color: red"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label">修改后的职位名称</label>
+                                <label class="col-md-3 col-form-label">修改后的姓名</label>
                                 <div class="col-md-9">
-                                    <input required type="text" class="form-control" maxlength="10" name="titletname"
-                                           value="${updateTitle.tname}">
+                                    <input required type="text" class="form-control" maxlength="10" name="empename"
+                                           value="${employee.ename}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label">修改后的密码</label>
+                                <div class="col-md-9">
+                                    <input id="password" required type="password" class="form-control" maxlength="10"
+                                           name="emppwd" value="${employee.password}">
+                                    <span id="empinspwd_err" class="err_msg" style="color: red"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label">再次确认密码</label>
+                                <div class="col-md-9">
+                                    <input id="acpassword" required type="password" class="form-control" maxlength="10"
+                                           value="${employee.password}">
+                                    <span id="acempinspwd_err" class="err_msg" style="color: red"></span>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -147,52 +163,116 @@
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/axios-0.18.0.js"></script>
 <script>
-    window.onload = function removetitleses() {
-        // console.log("失去焦点");
-        var value = "updateTitle";
-        axios({
-            method: "get",
-            url: "http://localhost:8080/admin/title/updateTitle?removeflag=true&updateTitle=" + value
-        }).then(function (resp) {
-        })
+    // window.onload = function removeempses() {
+    //     // console.log("失去焦点");
+    //     var value = "updateEmp";
+    //     axios({
+    //         method: "get",
+    //         url: "http://localhost:8080/admin/employee/updateEmp?removeflag=true&updateEmp=" + value
+    //     }).then(function (resp) {
+    //     })
+    // }
+
+    //1. 验证密码是否符合规则
+    //1.1 获取密码的输入框
+    var passwordInput = document.getElementById("password");
+    var getpassword;
+    //1.2 绑定onblur事件 失去焦点
+
+    passwordInput.onblur = checkPassword;
+
+
+    function checkPassword() {
+
+        //1.3 获取用户输入的密码
+        var password = passwordInput.value.trim();
+        getpassword = password;
+        //1.4 判断密码是否符合规则：长度 6~10
+        var reg = /^\w{6,10}$/;
+        var flag = reg.test(password);
+        //var flag = password.length >= 6 && password.length <= 12;
+        if (flag) {
+            //符合规则
+            document.getElementById("empinspwd_err").innerText = '';
+        } else {
+            //不合规则
+
+            document.getElementById("empinspwd_err").innerText = '密码长度为6~10位';
+            passwordInput.value = '';
+        }
+        return flag;
     }
 
+    //确认密码
+    var acpasswordInput = document.getElementById("acpassword");
 
-    var exitedID = true;
-    var updtitleID = document.getElementById("updtitleID");
-    var titleid_err = document.getElementById("titleid_err");
-    updtitleID.onblur = checkEmpID;
+    //1.2 绑定onblur事件 失去焦点
+    acpasswordInput.onblur = checkacPassword;
 
-    function checkEmpID() {
-        // console.log("失去焦点");
-        var value = updtitleID.value;
-        axios({
-            method: "get",
-            url: "http://localhost:8080/admin/title/updateTitle?idflag=true&titletid=" + value
-        }).then(function (resp) {
-            if (resp.data == "success") {
-                // alert("##" + resp.data + "##");
-                updtitleID.value = '';
-                titleid_err.innerText = '职位 ID不存在！';
-                exitedID = false;
-                // console.log("exited" + exitedID);
+    function checkacPassword() {
+        //1.3 获取用户输入的密码
+        var password = acpasswordInput.value.trim();
 
-            } else {
-                // alert("##" + resp.data + "##");
-                titleid_err.innerText = '';
-                exitedID = true;
-            }
-        })
+        var flag = getpassword == password;
+        //var flag = password.length >= 6 && password.length <= 12;
+        // console.log(getpassword)
+        // console.log(password)
+        // console.log(flag)
+        if (flag) {
+            //符合规则
+            document.getElementById("acempinspwd_err").innerText = '';
+        } else {
+            //不合规则
+            document.getElementById("acempinspwd_err").innerText = '两次密码输入不一致';
+            acpasswordInput.value = '';
+        }
+        return flag;
     }
+
+    // var exitedID = true;
+    // var updempID = document.getElementById("updempID");
+    // var empid_err = document.getElementById("empid_err");
+    // updempID.onblur = checkEmpID;
+    //
+    // function checkEmpID() {
+    //     // console.log("失去焦点");
+    //     var value = updempID.value;
+    //     axios({
+    //         method: "get",
+    //         url: "http://localhost:8080/admin/employee/updateEmp?idflag=true&eid=" + value
+    //     }).then(function (resp) {
+    //         if (resp.data == "success") {
+    //             // alert("##" + resp.data + "##");
+    //             updempID.value = '';
+    //             empid_err.innerText = '员工 ID不存在！';
+    //             exitedID = false;
+    //             console.log("exited" + exitedID);
+    //
+    //         } else {
+    //             // alert("##" + resp.data + "##");
+    //             empid_err.innerText = '';
+    //             exitedID = true;
+    //         }
+    //     })
+    // }
 
     //1. 获取表单对象
-    var titleupdform = document.getElementById("titleupdform");
+    var empupdform = document.getElementById("empupdform");
 
     //2. 绑定onsubmit 事件
-    titleupdform.onsubmit = function () {
-        //挨个判断表单项是否符合要求，如果有不合符，则返回false
+    empupdform.onsubmit = function () {
+        //挨个判断每一个表单项是否都符合要求，如果有一个不合符，则返回false
 
-        var flag = exitedID;
+        var flag = checkPassword() && checkacPassword();
+        // console.log(exitedID + "  " + checkPassword() + "  " + checkPassword())
+        // alert(flag);
+        // if (flag) {
+        //     //符合规则
+        //     document.getElementById("password_err").style.display = 'none';
+        // } else {
+        //     //不合符规则
+        //     document.getElementById("password_err").style.display = '';
+        // }
         return flag;
     }
 

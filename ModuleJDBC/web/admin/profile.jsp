@@ -11,7 +11,6 @@
     <title>蓝色星海管理系统</title>
     <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
     <!--[if lt IE 9]>
     <script src="../assets/js/html5shiv.min.js"></script>
@@ -70,7 +69,7 @@
                         <ul style="display: none;">
                             <li><a href="${pageContext.request.contextPath}/admin/title/selectAll">员工职位信息</a></li>
                             <li><a href="title_insert.jsp">新增员工职位信息</a></li>
-                            <li><a class="active" href="title_update.jsp">修改员工职位信息</a></li>
+                            <li><a href="title_update.jsp">修改员工职位信息</a></li>
                         </ul>
                     </li>
 
@@ -83,17 +82,19 @@
                             <li><a href="salary_update.jsp">修改员工工资信息</a></li>
                         </ul>
                     </li>
+
                     <li class="submenu">
                         <a href="#"><i class="fa fa-user"></i> <span> 个人信息管理 </span> <span
                                 class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li>
+                            <li class="active">
                                 <a href="${pageContext.request.contextPath}/admin/profile.jsp">个人信息</a>
                             </li>
                             <li><a href="${pageContext.request.contextPath}/admin/edit-profile.jsp">个人信息信息修改</a>
                             </li>
                         </ul>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -101,39 +102,54 @@
     <div class="page-wrapper">
         <div class="content">
             <div class="row">
-                <div class="col-sm-12">
-                    <h4 class="page-title">修改职位</h4>
+                <div class="col-sm-7 col-6">
+                    <h4 class="page-title">个人信息</h4>
+                </div>
+
+                <div class="col-sm-5 col-6 text-right m-b-30">
+                    <a href="edit-profile.jsp" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> 编辑个人信息</a>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card-box">
-                        <h4 class="card-title">修改职位信息</h4>
-                        <form action="/admin/title/updateTitle" id="titleupdform">
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">职位 ID</label>
-                                <div class="col-md-9">
-                                    <input required id="updtitleID" type="text" class="form-control"
-                                           value="${updateTitle.tid}" name="titletid" maxlength="3">
-                                    <span id="titleid_err" class="err_msg" style="color: red"></span>
+            <div class="card-box profile-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="profile-view">
+                            <%--                            <div class="profile-img-wrap">--%>
+                            <%--                                <div style="overflow: hidden" class="profile-img">--%>
+                            <%--                                    &lt;%&ndash;                                    <img class="avatar" src="../assets/img/user-06.jpg" alt="">&ndash;%&gt;--%>
+                            <%--                                </div>--%>
+                            <%--                            </div>--%>
+                            <div class="profile-basic">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="profile-info-left">
+                                            <h3 class="user-name m-t-0 mb-0">${employee.ename}</h3>
+                                            <small class="text-muted"></small>
+                                            <div class="staff-id">员工 ID : ${employee.eid}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <ul class="personal-info">
+                                            <li>
+                                                <span class="title">密码</span>
+                                                <span class="text">${employee.password}</span>
+                                            </li>
+                                            <li>
+                                                <span class="title">员工权限</span>
+                                                <span class="text">${employee.superuser}</span>
+                                            </li>
+                                            <li>
+                                                <span class="title">员工备注</span>
+                                                <span class="text">${employee.flag}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">修改后的职位名称</label>
-                                <div class="col-md-9">
-                                    <input required type="text" class="form-control" maxlength="10" name="titletname"
-                                           value="${updateTitle.tname}">
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <button type="submit" class="btn btn-primary">提交</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
     </div>
@@ -143,61 +159,7 @@
 <script src="../assets/js/popper.min.js"></script>
 <script src="../assets/js/bootstrap.min.js"></script>
 <script src="../assets/js/jquery.slimscroll.js"></script>
-<script src="../assets/js/select2.min.js"></script>
 <script src="../assets/js/app.js"></script>
-<script src="../assets/js/axios-0.18.0.js"></script>
-<script>
-    window.onload = function removetitleses() {
-        // console.log("失去焦点");
-        var value = "updateTitle";
-        axios({
-            method: "get",
-            url: "http://localhost:8080/admin/title/updateTitle?removeflag=true&updateTitle=" + value
-        }).then(function (resp) {
-        })
-    }
-
-
-    var exitedID = true;
-    var updtitleID = document.getElementById("updtitleID");
-    var titleid_err = document.getElementById("titleid_err");
-    updtitleID.onblur = checkEmpID;
-
-    function checkEmpID() {
-        // console.log("失去焦点");
-        var value = updtitleID.value;
-        axios({
-            method: "get",
-            url: "http://localhost:8080/admin/title/updateTitle?idflag=true&titletid=" + value
-        }).then(function (resp) {
-            if (resp.data == "success") {
-                // alert("##" + resp.data + "##");
-                updtitleID.value = '';
-                titleid_err.innerText = '职位 ID不存在！';
-                exitedID = false;
-                // console.log("exited" + exitedID);
-
-            } else {
-                // alert("##" + resp.data + "##");
-                titleid_err.innerText = '';
-                exitedID = true;
-            }
-        })
-    }
-
-    //1. 获取表单对象
-    var titleupdform = document.getElementById("titleupdform");
-
-    //2. 绑定onsubmit 事件
-    titleupdform.onsubmit = function () {
-        //挨个判断表单项是否符合要求，如果有不合符，则返回false
-
-        var flag = exitedID;
-        return flag;
-    }
-
-
-</script>
 </body>
 
 </html>

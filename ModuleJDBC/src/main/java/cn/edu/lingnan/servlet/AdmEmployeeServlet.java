@@ -17,7 +17,7 @@ public class AdmEmployeeServlet extends BaseServlet {
     private EmployeeService service = new EmployeeServiceMySQLImpl();
 
     public void selectAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("进来了");
+//        System.out.println("进来了");
         //1. 调用EmployeeService完成查询
         List<Employee> employees = service.queryAllEmployee(Employee.class);
 
@@ -39,6 +39,7 @@ public class AdmEmployeeServlet extends BaseServlet {
 
     public void selectPageAndCondition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         String empeid = request.getParameter("empeid");
         String empename = request.getParameter("empename");
 
@@ -52,6 +53,23 @@ public class AdmEmployeeServlet extends BaseServlet {
         session.setAttribute("employees", employees);
         String contextPath = request.getContextPath();
         response.sendRedirect(contextPath + "/admin/employees.jsp");
+
+    }
+
+    //    查询管理员个人信息
+    public void selectAdminInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+//        Employee employee = new Employee();
+//        employee.setEid(empeid);
+//        employee.setEname(empename);
+//
+//        List<Employee> employees = service.selectByCondition(employee);
+//        HttpSession session = request.getSession();
+//        Object employee1 = session.getAttribute("employee");
+//
+//        String contextPath = request.getContextPath();
+//        response.sendRedirect(contextPath + "/admin/employees.jsp");
 
     }
 
@@ -185,6 +203,7 @@ public class AdmEmployeeServlet extends BaseServlet {
 
     }
 
+    //赋予管理员权限
     public void updateEmployeeSuperuser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String eid = request.getParameter("eid");
         Employee employee = new Employee();
@@ -193,6 +212,26 @@ public class AdmEmployeeServlet extends BaseServlet {
         boolean b = service.updateEmployeeSuperuser(employee);
         System.out.println(b);
         response.sendRedirect("/admin/employee/selectAll");
+    }
+
+
+    //修改管理员个人信息
+    public void updateAdmEmployeeInfo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String eid = request.getParameter("eid");
+        String username = request.getParameter("empename");
+        String password = request.getParameter("emppwd");
+        Employee employee = new Employee();
+        employee.setEid(eid);
+        employee.setEname(username);
+        employee.setPassword(password);
+        employee.setSuperuser(1);
+        employee.setFlag(1);
+//            System.out.println(employee);
+        boolean b = service.updateEmployee(employee);
+        HttpSession session = request.getSession();
+        session.setAttribute("employee", employee);
+//            System.out.println(b);
+        response.sendRedirect("/admin/profile.jsp");
     }
 
 

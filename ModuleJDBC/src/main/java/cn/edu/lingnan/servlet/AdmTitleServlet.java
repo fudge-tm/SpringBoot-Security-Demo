@@ -29,7 +29,7 @@ public class AdmTitleServlet extends BaseServlet {
     }
 
     public void selectPageAndCondition(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         String titletid = request.getParameter("titletid");
         String titletname = request.getParameter("titletname");
         Title title = new Title();

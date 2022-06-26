@@ -23,6 +23,12 @@ public class SalaryServiceMySQLImpl implements SalaryService {
         return salaryDao.querySingleBysid(clazz, salary);
     }
 
+    @Override
+    public Salary querySingleByeid(Class<Salary> clazz, Salary salary) {
+
+        return salaryDao.querySingleByeid(clazz, salary);
+    }
+
     //    按条件查询
     @Override
     public List<Salary> selectByCondition(Salary salary) {
